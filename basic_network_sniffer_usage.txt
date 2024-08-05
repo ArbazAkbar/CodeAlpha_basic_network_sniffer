@@ -1,0 +1,4 @@
+##how to run this program:
+
+This program use root privileges in Linux OS
+Sudo python main.py

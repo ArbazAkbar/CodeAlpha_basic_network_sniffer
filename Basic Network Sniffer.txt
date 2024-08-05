@@ -1,0 +1,132 @@
+﻿Basic Network Sniffer
+1. Title Page
+* Project Title: Basic Network Sniffer
+* Date: August 5, 2024
+* Author(s): [Arbaz Khan]
+* Organization/Team Name: [Code Alpha]
+* Version: 1.0
+2. Table of Contents
+1. Title Page
+2. Table of Contents
+3. Executive Summary
+4. Introduction
+5. Objectives and Goals
+6. Methodology
+7. Project Implementation
+8. Analysis and Discussion
+9. Conclusion
+10. Recommendations
+11. Acknowledgments
+12. References
+13. Appendices
+3. Executive Summary
+The Basic Network Sniffer project aims to capture and analyze network traffic, providing insights into network activities. Using the Scapy library in Python, the project captures TCP, UDP, and ICMP packets, extracts key information, and prints it for analysis. This report outlines the project's development, implementation, results, and suggestions for future improvements.
+4. Introduction
+Background
+Network sniffing is a fundamental technique in network security for monitoring and analyzing network traffic. It is used to detect anomalies, troubleshoot network issues, and understand network usage patterns.
+Purpose
+The purpose of this project is to develop a simple network sniffer that captures and displays key information from TCP, UDP, and ICMP packets on a network.
+Scope
+This project focuses on capturing and displaying basic details of TCP, UDP, and ICMP packets. It does not include advanced features such as packet filtering, real-time threat detection, or data storage.
+Audience
+This report is intended for cybersecurity enthusiasts, network administrators, and individuals interested in network monitoring and analysis.
+5. Objectives and Goals
+* Develop a basic network sniffer using Python and the Scapy library.
+* Capture and display essential information from TCP, UDP, and ICMP packets.
+* Provide a foundational tool for further exploration and development in network monitoring.
+6. Methodology
+Project Plan
+The project was executed in several steps:
+1. Setup and Configuration: Setting up the development environment and necessary libraries.
+2. Packet Capture: Implementing the packet capture functionality.
+3. Packet Analysis: Extracting and displaying key information from the captured packets.
+Techniques and Tools
+* Programming Language: Python
+* Library: Scapy
+* Packet Types: TCP, UDP, ICMP
+Data Collection
+The sniffer captures packets in real-time using the sniff function from the Scapy library, with a custom packet processing function.
+Challenges and Assumptions
+* Challenges: Handling a large volume of network traffic and ensuring accurate packet parsing.
+* Assumptions: The system has the necessary permissions to capture network packets and is properly configured.
+7. Project Implementation
+Development
+The network sniffer was developed using the following code:
+python
+
+
+from scapy.all import sniff, TCP, UDP, ICMP, IP, Raw
+import time
+import signal
+
+
+def signal_handler(sig, frame):
+    print("\nProgram interrupted by user.")
+    raise SystemExit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+
+
+def process_packet(packet):
+    # Check if the packet has a TCP layer
+    if packet.haslayer(TCP):
+        print("TCP Packet:")
+        print("  Source IP:", packet[IP].src)
+        print("  Destination IP:", packet[IP].dst)
+        print("  Source Port:", packet[TCP].sport)
+        print("  Destination Port:", packet[TCP].dport)
+        print("  Flags:", packet[TCP].flags)
+        if packet.haslayer(Raw):
+            print("  Payload:", packet[Raw].load)
+
+
+    # Check if the packet has a UDP layer
+    elif packet.haslayer(UDP):
+        print("UDP Packet:")
+        print("  Source IP:", packet[IP].src)
+        print("  Destination IP:", packet[IP].dst)
+        print("  Source Port:", packet[UDP].sport)
+        print("  Destination Port:", packet[UDP].dport)
+        if packet.haslayer(Raw):
+            print("  Payload:", packet[Raw].load)
+
+
+    # Check if the packet has an ICMP layer
+    elif packet.haslayer(ICMP):
+        print("ICMP Packet:")
+        print("  Source IP:", packet[IP].src)
+        print("  Destination IP:", packet[IP].dst)
+        print("  Type:", packet[ICMP].type)
+        print("  Code:", packet[ICMP].code)
+
+
+start_time = time.time()
+sniff(prn=process_packet, store=False)
+
+
+Testing and Evaluation
+The sniffer was tested on a local network, capturing various TCP, UDP, and ICMP packets. The output was verified to ensure accurate extraction and display of packet details.
+Results
+The sniffer successfully captured and displayed information from TCP, UDP, and ICMP packets, including source and destination IPs, ports, and protocol-specific details.
+8. Analysis and Discussion
+Interpretation of Results
+The sniffer's ability to capture and display packet information demonstrates its effectiveness as a basic network monitoring tool. However, its functionality is limited to displaying information without further analysis or alerting.
+Comparison with Objectives
+The project met its objectives by implementing a basic network sniffer that captures and displays packet information.
+Lessons Learned
+* The importance of handling various packet types and protocols.
+* The need for real-time analysis capabilities to enhance the sniffer's utility.
+9. Conclusion
+The Basic Network Sniffer project successfully developed a simple tool for capturing and displaying network traffic. It serves as a foundational project for understanding network protocols and monitoring techniques.
+10. Recommendations
+* Enhancements: Implement packet filtering and real-time alerting features.
+* Performance Optimization: Improve performance to handle high traffic volumes.
+* User Interface: Develop a graphical user interface for easier monitoring and control.
+11. Acknowledgments
+Special thanks to the developers of the Scapy library and the open-source community for their valuable resources and support.
+12. References
+* Scapy Documentation: https://scapy.readthedocs.io/
+13. Appendices
+* Appendix A: Additional Code Snippets
+* Appendix B: Sample Packet Data
